@@ -1,12 +1,16 @@
-// this will be the 
+import ProductGrid from '../../components/ProductGrid';
+
 export default function UserDashboard() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <div>
+    <div className="min-h-screen bg-gray-50">
+      <div className="container mx-auto px-4 py-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome to Our Store</h1>
+          <p className="text-gray-600">Browse our fresh selection of fruits, vegetables, dairy, and meat products.</p>
+        </div>
         
-        {/* Need to add a carousel here for sample products */}
-        {/* Links to different pages for our router */}
-        Here we will have a list of products in cards and allow the user to select items
+        {/* Product Grid Component */}
+        <ProductGrid />
       </div>
     </div>
   );
