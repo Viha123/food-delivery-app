@@ -3,9 +3,11 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
+        
 
 enum UserRole {
   USER
@@ -59,6 +61,7 @@ model Product {
   quantityOnHand  Int
   cartItems       CartItem[]
   orderItems      OrderItem[]
+  imageUrl        String?
 }
 
 model Cart {
