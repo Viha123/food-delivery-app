@@ -115,6 +115,6 @@ main()
     await prisma.$disconnect();
     process.exit(1);
   })
-  .then(async () => {
+  .finally(async () => {
     await prisma.$disconnect();
   });
