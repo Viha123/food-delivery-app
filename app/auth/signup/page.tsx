@@ -2,6 +2,7 @@
 
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
+import { registerUser, authenticateUser } from '@/lib/actions/auth';
 
 export default function SignUp() {
   const [isLoading, setIsLoading] = useState(false);
@@ -43,41 +44,42 @@ export default function SignUp() {
     }
 
     try {
-      const response = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          firstName: userData.firstName,
-          lastName: userData.lastName,
-          email: userData.email,
-          phoneNumber: userData.phoneNumber,
-          password: userData.password,
-        }),
+      // Use Server Action for registration
+      const result = await registerUser({
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        email: userData.email,
+        phoneNumber: userData.phoneNumber,
+        password: userData.password,
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
-        // Account created successfully, now sign them in
-        const signInResult = await signIn('credentials', {
-          email: userData.email,
-          password: userData.password,
-          redirect: false,
-        });
-
-        if (signInResult?.ok) {
-          window.location.href = '/home/user';
+      if (result.success) {
+        // Account created successfully, now sign them in using Server Action
+        const signInResult = await authenticateUser(userData.email, userData.password);
+        
+        if (signInResult.success && signInResult.user) {
+          // Store user data in localStorage for consistent session management
+          localStorage.setItem('user', JSON.stringify({
+            id: signInResult.user.id,
+            email: signInResult.user.email,
+            firstName: signInResult.user.firstName,
+            lastName: signInResult.user.lastName,
+            role: signInResult.user.role,
+          }));
+          
+          // Redirect based on role
+          if (signInResult.user.role === 'ADMIN') {
+            window.location.href = '/home/admin';
+          } else {
+            window.location.href = '/home/user';
+          }
         } else {
           setError('Account created but sign-in failed. Please try signing in manually.');
         }
-      } else {
-        setError(data.error || 'Failed to create account');
       }
     } catch (error) {
       console.error('Signup error:', error);
-      setError('An error occurred. Please try again.');
+      setError(error instanceof Error ? error.message : 'An error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }
