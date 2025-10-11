@@ -1,6 +1,11 @@
 import ProductGrid from '../../components/ProductGrid';
-
-export default function UserDashboard() {
+import * as productService from "@/lib/services/product";
+import { productToProductClient } from '@/lib/utils/convert';
+export default async function UserDashboard() {
+  const products = await productService.getAllProducts();
+  const productClients = products.map((p) => {
+    return productToProductClient(p);
+    })
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
@@ -10,7 +15,10 @@ export default function UserDashboard() {
         </div>
         
         {/* Product Grid Component */}
-        <ProductGrid />
+        <ProductGrid
+          // ProductGridProps.products=productClients
+          products={productClients}
+        />
       </div>
     </div>
   );

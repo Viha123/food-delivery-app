@@ -2,21 +2,10 @@
 
 import ProductCard from './ProductCard';
 
-// Types based on your Prisma schema
-type ProductCategory = 'FRUIT' | 'VEGETABLE' | 'DAIRY' | 'MEAT';
-
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  category: ProductCategory;
-  pricePerUnit: number;
-  weightPerUnit: number;
-  quantityOnHand: number;
-}
-
+import { ProductClient } from '@/types/ofs/product-client';
+import { ProductCategory } from '@prisma/client';
 // Dummy data based on your schema
-const dummyProducts: Product[] = [
+const dummyProducts: ProductClient[] = [
   {
     id: 1,
     name: "Fresh Apples",
@@ -24,7 +13,8 @@ const dummyProducts: Product[] = [
     category: "FRUIT",
     pricePerUnit: 3.99,
     weightPerUnit: 1.0,
-    quantityOnHand: 50
+    quantityOnHand: 50,
+    imageUrl: "",
   },
   {
     id: 2,
@@ -33,7 +23,8 @@ const dummyProducts: Product[] = [
     category: "VEGETABLE",
     pricePerUnit: 2.49,
     weightPerUnit: 0.5,
-    quantityOnHand: 25
+    quantityOnHand: 25,
+    imageUrl: ""
   },
   {
     id: 3,
@@ -42,7 +33,8 @@ const dummyProducts: Product[] = [
     category: "DAIRY",
     pricePerUnit: 4.29,
     weightPerUnit: 1.0,
-    quantityOnHand: 30
+    quantityOnHand: 30,
+    imageUrl: ""
   },
   {
     id: 4,
@@ -51,7 +43,8 @@ const dummyProducts: Product[] = [
     category: "MEAT",
     pricePerUnit: 8.99,
     weightPerUnit: 0.5,
-    quantityOnHand: 15
+    quantityOnHand: 15,
+    imageUrl: ""
   },
   {
     id: 5,
@@ -60,7 +53,8 @@ const dummyProducts: Product[] = [
     category: "FRUIT",
     pricePerUnit: 1.99,
     weightPerUnit: 1.0,
-    quantityOnHand: 100
+    quantityOnHand: 100,
+    imageUrl: ""
   },
   {
     id: 6,
@@ -69,7 +63,8 @@ const dummyProducts: Product[] = [
     category: "VEGETABLE",
     pricePerUnit: 2.99,
     weightPerUnit: 0.75,
-    quantityOnHand: 20
+    quantityOnHand: 20,
+    imageUrl: ""
   },
   {
     id: 7,
@@ -78,7 +73,8 @@ const dummyProducts: Product[] = [
     category: "DAIRY",
     pricePerUnit: 5.99,
     weightPerUnit: 0.5,
-    quantityOnHand: 0 // Out of stock example
+    quantityOnHand: 0, // Out of stock example,
+    imageUrl: ""
   },
   {
     id: 8,
@@ -87,22 +83,25 @@ const dummyProducts: Product[] = [
     category: "MEAT",
     pricePerUnit: 7.49,
     weightPerUnit: 0.5,
-    quantityOnHand: 22
+    quantityOnHand: 22,
+    imageUrl: ""
   }
 ];
 
 interface ProductGridProps {
   filterCategory?: ProductCategory | 'ALL';
   searchQuery?: string;
+  products: ProductClient[]
 }
 
 export default function ProductGrid({ 
   filterCategory = 'ALL', 
-  searchQuery = '' 
+  searchQuery = '',
+  products = dummyProducts
 }: ProductGridProps) {
   
   // Filter products based on category and search query
-  const filteredProducts = dummyProducts.filter(product => {
+  const filteredProducts = products.filter(product => {
     const matchesCategory = filterCategory === 'ALL' || product.category === filterCategory;
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          product.description.toLowerCase().includes(searchQuery.toLowerCase());

@@ -18,28 +18,3 @@ export function isAdmin(user: any) {
 export function isUser(user: any) {
   return user && user.role === 'USER';
 }
-
-// Mock authentication state for development
-export const mockAuth = {
-  signIn: (credentials: any) => {
-    console.log('Mock sign in with:', credentials);
-    localStorage.setItem('mockUser', JSON.stringify({
-      id: '1',
-      email: credentials.email,
-      role: credentials.email.includes('admin') ? 'ADMIN' : 'USER',
-      name: 'Test User'
-    }));
-  },
-
-  signOut: () => {
-    localStorage.removeItem('mockUser');
-  },
-
-  getCurrentUser: () => {
-    if (typeof window !== 'undefined') {
-      const user = localStorage.getItem('mockUser');
-      return user ? JSON.parse(user) : null;
-    }
-    return null;
-  }
-};

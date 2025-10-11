@@ -1,16 +1,37 @@
 import {OrderStatus, PrismaClient, ProductCategory, UserRole,} from '@prisma/client';
 
+import {hashPassword} from '../lib/auth-utils';
+
 const prisma = new PrismaClient();
 
+/*
+ * SEEDED USER CREDENTIALS:
+ *
+ * ADMIN USERS:
+ * - sviha@gmail.com / admin123 (Admin)
+ * - alice@example.com / admin123 (Admin)
+ *
+ * REGULAR USERS:
+ * - bob@example.com / password123 (User)
+ *
+ * All users can also sign in via Google OAuth if they have Google accounts.
+ */
+
 async function main() {
+  // Hash passwords for seeded users
+  const defaultPassword =
+      await hashPassword('password123');  // Default password for all test users
+  const adminPassword = await hashPassword('admin123');  // Admin password
+
   // Create Users
   const viha = await prisma.user.create({
     data: {
       firstName: 'Viha',
       lastName: 'Shah',
-      email: 'sviha195@gmail.com',
+      email: 'sviha@gmail.com',
       name: 'Viha Shah',
       role: UserRole.ADMIN,
+      password: adminPassword,  // Password: admin123
       addresses: {
         create: [
           {
@@ -32,6 +53,7 @@ async function main() {
       email: 'alice@example.com',
       phoneNumber: '123-456-7890',
       role: UserRole.ADMIN,
+      password: adminPassword,  // Password: admin123
       addresses: {
         create: [
           {
@@ -53,6 +75,7 @@ async function main() {
       email: 'bob@example.com',
       phoneNumber: '987-654-3210',
       role: UserRole.USER,
+      password: defaultPassword,  // Password: password123
       addresses: {
         create: [
           {
