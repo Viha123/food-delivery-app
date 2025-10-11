@@ -59,9 +59,10 @@ export const authOptions: NextAuthOptions = {
     async signIn({user, account}) {
       // Auto-assign admin role to specific emails
       const adminEmails = [
-        'sviha195@gmail.com',    // Your correct email
-        'vihashah@gmail.com',    // Alternative email if needed
-        'your-email@gmail.com',  // Replace with your actual Google email
+        'sviha195@gmail.com',  // Your correct email
+        'sviha@gmail.com',     // Seeded admin email
+        'alice@example.com',   // Seeded admin email
+        'vihashah@gmail.com',  // Alternative email if needed
         // Add more admin emails here
       ];
 

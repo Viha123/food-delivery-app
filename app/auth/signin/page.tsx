@@ -2,6 +2,7 @@
 
 import { signIn, getProviders } from 'next-auth/react';
 import { useState, useEffect } from 'react';
+import { authenticateUser } from '@/lib/actions/auth';
 
 export default function SignIn() {
   const [providers, setProviders] = useState<any>(null);
@@ -42,21 +43,23 @@ export default function SignIn() {
     const password = formData.get('password') as string;
     
     try {
-      const result = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
-      });
-
-      if (result?.error) {
-        alert(`Sign-in failed: ${result.error}`);
-      } else if (result?.ok) {
-        // Redirect to user dashboard on successful login
-        window.location.href = '/home/user';
+      // Call server action directly (no fetch needed!)
+      const result = await authenticateUser(email, password);
+      
+      if (result.success) {
+        // Store user data in localStorage
+        localStorage.setItem('user', JSON.stringify(result.user));
+        
+        // Redirect based on user role
+        if (result.user.role === 'ADMIN') {
+          window.location.href = '/home/admin';
+        } else {
+          window.location.href = '/home/user';
+        }
       }
     } catch (error) {
       console.error('Sign-in error:', error);
-      alert('An error occurred during sign-in. Please try again.');
+      alert(`Sign-in failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 
