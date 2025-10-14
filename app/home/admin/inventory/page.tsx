@@ -1,5 +1,5 @@
 import InventoryTable from "./InventoryTable";
-import { InventorySkeleton } from "./InventorySkeleton";
+import { InventorySkeleton } from "@/app/ui/skeletons";
 import { Suspense } from 'react';
 
 // this will be the 
