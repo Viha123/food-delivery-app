@@ -85,9 +85,6 @@ export default async function InventoryTable() {
                   <button className="text-blue-600 hover:text-blue-900 transition-colors">
                     Edit
                   </button>
-                  <button className="text-green-600 hover:text-green-900 transition-colors">
-                    Track
-                  </button>
                   <button className="text-red-600 hover:text-red-900 transition-colors">
                     Remove
                   </button>
